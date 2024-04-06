@@ -125,3 +125,88 @@ export default async function (event: Events.Ready) {
 {% endcode %}
 
 After saving this, look at your terminal. It should show the above message
+
+### Add a message (prefix) command
+
+<details>
+
+<summary>Enable Message Content Intent</summary>
+
+![](../.gitbook/assets/messagecontent.png)
+
+</details>
+
+We need to set the intent in our code to be able to read messages
+
+{% code title="app.ts" %}
+```typescript
+discord.listen(process.env.DISCORD_BOT_TOKEN as string, {
+    intents: ["message_content", "guild_messages"]
+})
+```
+{% endcode %}
+
+Next, lets handle the command. We'll use the discord/message/create event
+
+{% code title="functions/discord/message/create/ping.ts" %}
+```typescript
+import { Events, messages } from '@splitscript.js/discord'
+
+export default async function (event: Events.MessageCreate) {
+    // Check if the message starts with !ping, and exit if it doesn't
+    if (!event.content.startsWith("!ping")) return
+
+    // Send a message back
+    await messages.create(event.channelId, {
+        content: "Pong!"
+    })
+}
+```
+{% endcode %}
+
+Now, when you send a message starting with !ping, our bot responds with Pong!
+
+### Slash Commands
+
+{% hint style="warning" %}
+This section requires the applications.commands scope
+{% endhint %}
+
+#### Register the Command
+
+Before we can handle commands, we need to register it first. Lets do this automatically in our  functions/discord/ready folder.
+
+{% code title="functions/discord/ready/commands.ts" %}
+```typescript
+import { Events, commands } from '@splitscript.js/discord';
+export default async function (event: Events.Ready) {
+    await commands.create({name: "ping", description: "pong"})
+}
+```
+{% endcode %}
+
+It may take a few minutes for the command to appear
+
+#### Handle the Command
+
+{% code title="functions/discord/interaction/create/ping.ts" %}
+```typescript
+import { Events, responses } from '@splitscript.js/discord';
+import { CallbackMessageType } from '@splitscript.js/discord/responses';
+
+export default async function (event: Events.InteractionCreate) {
+    // If its not the ping command, return
+    if (event.data?.name !== 'ping') return
+
+    // Reply to the command
+    await responses.create(event.id, event.token, {
+        type: CallbackMessageType.Reply,
+        data: {
+            content: 'Pong!'
+        }
+    })
+}
+```
+{% endcode %}
+
+After runnning /ping, our bot should reply with Pong!
