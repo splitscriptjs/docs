@@ -12,6 +12,7 @@
 ## 🤖 discord
 
 * [getting started](discord/start.md)
+* [create your first project](discord/create-your-first-project.md)
 * [automod](discord/automod.md)
 * [bans](discord/bans.md)
 * [channels](discord/channels.md)
