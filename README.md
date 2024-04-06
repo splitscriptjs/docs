@@ -22,9 +22,9 @@ $ npm i @splitscript.js/core
 
 We have a few packages
 
-* [Broken link](broken-reference "mention")  - for building your project through the CLI or for creating your own packages
-* [Broken link](broken-reference "mention")  - for building discord bots!
-* [Broken link](broken-reference "mention")  - for sending http(s) requests
+* [core](broken-reference) - for building your project through the CLI or for creating your own packages
+* [discord](broken-reference) - for building discord bots!
+* [https](broken-reference) - for sending http(s) requests
 
 ## Project Structure
 
